@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorSplash">#636363</color>
+    <color name="colorYellowAndGreen">#a2ab58</color>
+    <color name="colorGolden">#B8860B</color>
+    <color name="ligthGodenrod">#EEDD82</color>
+    <color name="goldenrod">#DAA520</color>
+    <color name="goldenrod1">#8B7500</color>
+    <color name="darkGoldenrod2">#CD950C</color>
+    <color name="chocolate">#EE7621</color>
+    <color name="burlywood1">#FFD39B</color>
+    <color name="sienna">#CD6839</color>
+    <color name="peru">#CD853F</color>
+    <color name="black">#000000</color>
+    <color name="grey">#4F4F4F</color>
+</resources>
