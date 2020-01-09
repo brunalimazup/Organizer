@@ -8,6 +8,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,24 +23,45 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-    }
+        var btnImage = findViewById(R.id.image) as ImageButton
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+        btnImage.setOnClickListener {
+            Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.retur -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                true
+            var btnMusic = findViewById(R.id.music) as ImageButton
+
+            btnMusic.setOnClickListener {
+                Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
+
+                var btnPdf = findViewById(R.id.pdf) as ImageButton
+
+                btnPdf.setOnClickListener {
+                    Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
+
+                    var btnVideo = findViewById(R.id.video) as ImageButton
+
+                    btnVideo.setOnClickListener {
+                        Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
+
+                        var btnFiles = findViewById(R.id.files) as ImageButton
+
+                        btnFiles.setOnClickListener {
+                            Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
+
+                            var btnAndroid = findViewById(R.id.android) as ImageButton
+
+                            btnAndroid.setOnClickListener {
+                                Toast.makeText(this, "YOU CLICKED ME.", Toast.LENGTH_SHORT).show()
+                            }
+
+
+                        }
+                    }
+
+                }
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
-
 }
 
 
