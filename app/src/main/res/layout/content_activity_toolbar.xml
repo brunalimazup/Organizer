@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:background="#66000000"
     android:orientation="vertical"
-    android:visibility="visible"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    app:navigationIcon="?attr/actionModeCloseDrawable"
-    app:titleTextColor="@color/black">
+    android:visibility="visible"/>
+<!--    app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--    app:navigationIcon="?attr/actionModeCloseDrawable"-->
+<!--    app:titleTextColor="@color/black">-->
 
-</androidx.appcompat.widget.Toolbar>
+<!--</androidx.appcompat.widget.Toolbar>-->

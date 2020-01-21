@@ -1,103 +1,124 @@
 package com.example.organizer
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.text.TextUtils
 import android.util.Log
-import android.widget.ImageButton
+import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_activity_toolbar.*
-import permissions.dispatcher.*
-import java.io.*
-import java.lang.System.load
-
+import org.reactivestreams.Publisher
+import org.reactivestreams.Subscriber
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
+
+    val requestCode = 100
+    var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+    }
 
-        val state = Environment.getExternalStorageState()
-        if (Environment.MEDIA_MOUNTED == state) {
-
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY == state) {
-
+    fun list(view: View) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
         } else {
-
+            listExternalStorage()
         }
+    }
 
-        val directoryOne =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        val directoryTwo =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val directoryThree =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-
-        fun getExternalDir(privateDir: Boolean) =
-            if (privateDir) getExternalFilesDir(null)
-            else Environment.getExternalStorageDirectory()
-
-        fun saveToExternal(privateDir : Boolean) {
-            val hasPermission = checkStoragePermission(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                RC_STORAGE_PERMISSION)
-            if(!hasPermission) {
-                return
-            }else {
-                Log.e("NGVL", "Não é possivel escrever no SD card")
-            }
-        }
-        fun loadFromExternal(privateDir : Boolean) {
-            val hasPermission =  checkStoragePermission(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                RC_STORAGE_PERMISSION)
-            if(!hasPermission) {
-                return
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == this.requestCode) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                listExternalStorage()
             } else {
-                Log.e("NGVL", "SD Card indisponivel")
+                Toast.makeText(
+                    this,
+                    "Até você conceder a permissão, não consigo listar os arquivos",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
         }
     }
 
-    fun checkStoragePermission(permission : String, requestedCode: Int): Boolean{
-        if(ActivityCompat.checkSelfPermission(this,permission)
-        != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)){
-                Toast.makeText(this, R.string.message_permission_requested,
-                    Toast.LENGTH_SHORT).show()
-            }
-            ActivityCompat.requestPermissions(this, arrayOf(permission), requestedCode)
-            return false
-        }
-            return true
+    override fun onPause() {
+        super.onPause()
+        this.disposable?.dispose()
     }
 
-    override fun onRequestPermissionsResult(requestedCode: Int, permission: Array<String>, grantResult: IntArray){
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResult)
-        when(requestedCode){
-            RC_STORAGE_PERMISSION -> {
-                if(grantResult[0] == PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, R.string.permission_granted,
-                        Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, R.string.permission_denied,
-                        Toast.LENGTH_SHORT).show()
+    private fun listExternalStorage() {
+        val state = Environment.getExternalStorageState()
+
+        if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
+
+            this.disposable =
+                Observable.fromPublisher(FileLister(Environment.getExternalStorageDirectory()))
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        txtFiles.append(it + "\n")
+                    }, {
+                        Log.e("MainActivity", "Erro ao listar os arquivos do SD card", it)
+                    }, {
+                        Toast.makeText(
+                            this,
+                            "Sucesso, listagem de arquivos completa",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        this.disposable?.dispose()
+                        this.disposable = null
+                    })
+        }
+    }
+
+    private class FileLister(val directory: File) : Publisher<String> {
+
+        private lateinit var subscriber: Subscriber<in String>
+
+        override fun subscribe(s: Subscriber<in String>?) {
+            if (s == null) {
+                return
+            }
+            this.subscriber = s
+            this.listFiles(this.directory)
+            this.subscriber.onComplete()
+        }
+
+        private fun listFiles(directory: File) {
+            val files = directory.listFiles()
+            if (files != null) {
+                for (file in files) {
+                    if (file != null) {
+                        if (file.isDirectory) {
+                            listFiles(file)
+                        } else {
+                            subscriber.onNext(file.absolutePath)
+                        }
+                    }
                 }
             }
         }
     }
-    companion object{
-        val RC_STORAGE_PERMISSION = 0
-    }
 }
+
+
+
+
+
 
 
