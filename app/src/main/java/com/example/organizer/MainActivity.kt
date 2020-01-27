@@ -1,6 +1,9 @@
 package com.example.organizer
 
 import android.Manifest
+import android.app.ActionBar
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -8,12 +11,17 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.ui.AppBarConfiguration
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.reactivestreams.Publisher
 import org.reactivestreams.Subscriber
 import java.io.File
@@ -26,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
     }
 
     fun list(view: View) {
@@ -47,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Até você conceder a permissão, não consigo listar os arquivos",
+                    "É necessário aceitar a permissão para ter acesso.",
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -60,7 +69,27 @@ class MainActivity : AppCompatActivity() {
         this.disposable?.dispose()
     }
 
+    //   **
+//    private val READ_REQUEST_CODE: Int = 42
+//    fun performFileSearch() {
+//        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+//            addCategory(Intent.CATEGORY_OPENABLE)
+//            type = "image/*"
+//        }
+//        startActivityForResult(intent, READ_REQUEST_CODE)
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+//        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            resultData?.data?.also { uri ->
+//                Log.i(TAG, "Uri: $uri")
+//                showImage(uri)
+//            }
+//        }
+//    }
+
     private fun listExternalStorage() {
+
         val state = Environment.getExternalStorageState()
 
         if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
@@ -114,6 +143,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
 
 
