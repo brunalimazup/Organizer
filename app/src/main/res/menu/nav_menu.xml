@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group>
+        <item
+            android:id="@+id/nav_documents"
+            android:icon="@drawable/ic_folder_24px"
+            android:title="Documents" />
+
+        <item
+            android:id="@+id/nav_image"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Documents" />
+
+        <item
+            android:id="@+id/nav_slideShow"
+            android:icon="@drawable/ic_slideshow_24px"
+            android:title="Documents" />
+
+        <item
+            android:id="@+id/nav_pdf"
+            android:icon="@drawable/ic_picture_as_pdf_24px"
+            android:title="Documents" />
+    </group>
+    <item android:title="Configurações">
+        <menu>
+            <item
+                android:id="@+id/nav_logOut"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="Exit" />
+        </menu>
+    </item>
+</menu>
