@@ -10,15 +10,15 @@
 
     <ImageView
         android:id="@+id/ivFile"
-        android:layout_width="@dimen/icon_size_normal"
-        android:layout_height="@dimen/icon_size_normal"
-        tools:src="@drawable/ic_folder_24px"/>
+        android:layout_width="112dp"
+        android:layout_height="53dp"
+        tools:src="@drawable/ic_folder_24px" />
 
     <TextView
         android:id="@+id/tvFileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        tools:text="File"/>
+        tools:text="File" />
 
 </LinearLayout>

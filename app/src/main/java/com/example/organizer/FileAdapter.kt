@@ -1,16 +1,16 @@
 package com.example.organizer
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_view.view.*
 import java.io.File
 
 typealias OnItemClickListener = (File) -> Unit
-
-class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
+class FileAdapter(private val context: Context, private var fileList: Array<String>):
+    RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
 
     private var itens = ArrayList<File>()
     private var onItemClickListener: OnItemClickListener? = null
@@ -24,7 +24,7 @@ class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
             )
         )
 
-    override fun getItemCount(): Int = itens.size
+    override fun getItemCount() = itens.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
@@ -43,12 +43,12 @@ class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
                 onItemClickListener?.invoke(file)
             }
         }
+        fun getItens(itens: ArrayList<File>) {
+            this.itens.clear()
+            this.itens.addAll(itens)
+            notifyDataSetChanged()
     }
 
-    fun getItens(itens: ArrayList<File>) {
-        this.itens.clear()
-        this.itens.addAll(itens)
-        notifyDataSetChanged()
     }
 
     fun setOnItemClick(onItemClickListener: OnItemClickListener) {

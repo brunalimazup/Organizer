@@ -5,19 +5,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
-import android.view.View
-import android.widget.GridLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import org.reactivestreams.Publisher
-import org.reactivestreams.Subscriber
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -25,10 +17,16 @@ class MainActivity : AppCompatActivity() {
     val requestCode = 100
     var disposable: Disposable? = null
 
+    lateinit var fileAdapter: FileAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        fileAdapter = FileAdapter(this, fileList())
+        recyclerViewFile.adapter = fileAdapter
+        recyclerViewFile.layoutManager = LinearLayoutManager(this)
+        recyclerViewFile.smoothScrollToPosition(fileList().size)
     }
 
     fun list() {
@@ -75,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     object FileLister {
-       fun listFiles(directory: File) {
+        fun listFiles(directory: File) {
             val files = directory.listFiles()
             if (files != null) {
                 for (file in files) {
@@ -92,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
 
 
 
