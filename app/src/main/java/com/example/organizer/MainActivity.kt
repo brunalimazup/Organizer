@@ -14,22 +14,19 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    val requestCode = 100
-    var disposable: Disposable? = null
+    private val requestCode = 100
+    private var disposable: Disposable? = null
 
     lateinit var fileAdapter: FileAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        list()
 
-        fileAdapter = FileAdapter(this, fileList())
-        recyclerViewFile.adapter = fileAdapter
-        recyclerViewFile.layoutManager = LinearLayoutManager(this)
-        recyclerViewFile.smoothScrollToPosition(fileList().size)
     }
 
-    fun list() {
+    private fun list() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), requestCode)
         } else {
@@ -66,8 +63,15 @@ class MainActivity : AppCompatActivity() {
 
         if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
 
-            FileLister.listFiles(Environment.getExternalStorageDirectory())
-            FileLister.listFiles(File("/storage/emulated/0/DCIM"))
+            fileAdapter = FileAdapter()
+            recyclerViewFile.adapter = fileAdapter
+            recyclerViewFile.layoutManager = LinearLayoutManager(this)
+            fileAdapter.setItens(ArrayList(Environment.getExternalStorageDirectory().listFiles().toList()))
+            fileAdapter.setOnItemClick {
+                fileAdapter.setItens(ArrayList(it.listFiles().toList()))
+            }
+//            FileLister.listFiles(Environment.getExternalStorageDirectory())
+//            FileLister.listFiles(File("/storage/emulated/0/DCIM"))
 
         }
     }

@@ -9,8 +9,8 @@ import kotlinx.android.synthetic.main.list_item_view.view.*
 import java.io.File
 
 typealias OnItemClickListener = (File) -> Unit
-class FileAdapter(private val context: Context, private var fileList: Array<String>):
-    RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
+
+class FileAdapter: RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
 
     private var itens = ArrayList<File>()
     private var onItemClickListener: OnItemClickListener? = null
@@ -27,7 +27,6 @@ class FileAdapter(private val context: Context, private var fileList: Array<Stri
     override fun getItemCount() = itens.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-
         with(holder.itemView) {
             val file = itens[position]
             ivFile.setImageResource(
@@ -43,12 +42,13 @@ class FileAdapter(private val context: Context, private var fileList: Array<Stri
                 onItemClickListener?.invoke(file)
             }
         }
-        fun getItens(itens: ArrayList<File>) {
-            this.itens.clear()
-            this.itens.addAll(itens)
-            notifyDataSetChanged()
+
     }
 
+    fun setItens(itens: ArrayList<File>) {
+        this.itens.clear()
+        this.itens.addAll(itens)
+        notifyDataSetChanged()
     }
 
     fun setOnItemClick(onItemClickListener: OnItemClickListener) {
