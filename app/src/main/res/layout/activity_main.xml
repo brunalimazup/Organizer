@@ -6,11 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+    <include layout="@layout/activity_toolbar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFile"
@@ -19,6 +15,9 @@
         android:layout_marginTop="56dp"
         app:layout_constraintTop_toBottomOf="@+id/include"
         tools:layout_editor_absoluteX="0dp" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +24,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         list()
+        allComponents()
+    }
 
+   private fun allComponents() {
+        var toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setTitle("SD CARD")
+        toolbar.setNavigationOnClickListener({finish ()})
     }
 
     private fun list() {
@@ -53,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onPause() {
         super.onPause()
         this.disposable?.dispose()
@@ -65,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
             fileAdapter = FileAdapter()
             recyclerViewFile.adapter = fileAdapter
-            recyclerViewFile.layoutManager = LinearLayoutManager(this)
+            recyclerViewFile.layoutManager = GridLayoutManager(this, 3)
             fileAdapter.setItens(ArrayList(Environment.getExternalStorageDirectory().listFiles().toList()))
             fileAdapter.setOnItemClick {
                 fileAdapter.setItens(ArrayList(it.listFiles().toList()))
@@ -76,23 +85,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    object FileLister {
-        fun listFiles(directory: File) {
-            val files = directory.listFiles()
-            if (files != null) {
-                for (file in files) {
-                    if (file != null) {
-                        if (file.isDirectory) {
-                            println("DIR: > " + file.absolutePath)
-                            listFiles(file)
-                        } else {
-                            println("          FILE: > " + file.absolutePath)
-                        }
-                    }
-                }
-            }
-        }
-    }
+
+
 }
 
 
