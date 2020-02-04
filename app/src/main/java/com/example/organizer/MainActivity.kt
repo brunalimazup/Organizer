@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,13 +26,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         list()
         allComponents()
+        onBackPressed()
     }
 
    private fun allComponents() {
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle("SD CARD")
-        toolbar.setNavigationOnClickListener({finish ()})
+        toolbar.setNavigationOnClickListener{
+            fileAdapter.goBack()
+        }
     }
 
     private fun list() {
@@ -83,6 +87,9 @@ class MainActivity : AppCompatActivity() {
 //            FileLister.listFiles(File("/storage/emulated/0/DCIM"))
 
         }
+    }
+    override fun onBackPressed() {
+        fileAdapter.goBack()
     }
 
 

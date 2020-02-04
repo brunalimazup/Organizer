@@ -10,10 +10,11 @@ import java.io.File
 
 typealias OnItemClickListener = (File) -> Unit
 
-class FileAdapter: RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
+class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
 
     private var itens = ArrayList<File>()
     private var onItemClickListener: OnItemClickListener? = null
+    private var selectedFile: File? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder =
         ItemViewHolder(
@@ -39,6 +40,7 @@ class FileAdapter: RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
             tvFileName.text = file.name
 
             setOnClickListener {
+                selectedFile = file
                 onItemClickListener?.invoke(file)
             }
         }
@@ -49,6 +51,13 @@ class FileAdapter: RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
         this.itens.clear()
         this.itens.addAll(itens)
         notifyDataSetChanged()
+    }
+
+    fun goBack() {
+        selectedFile = selectedFile?.let {
+            setItens(ArrayList(it.parentFile.listFiles()?.toList()?: mutableListOf()))
+            it.parentFile
+        }
     }
 
     fun setOnItemClick(onItemClickListener: OnItemClickListener) {
