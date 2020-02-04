@@ -31,12 +31,22 @@ class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
         with(holder.itemView) {
             val file = itens[position]
             ivFile.setImageResource(
-                if (file.isDirectory) {
-                    R.drawable.ic_folder_24px
-                } else {
-                    R.drawable.ic_picture_as_pdf_24px
+                when  {
+                    (file.path.contains("/storage/emulated/0/Android")) -> R.drawable.ic_android_black
+                    (file.path.contains("/storage/emulated/0/Music")) -> R.drawable.ic_library_music_black_24dp
+                    (file.path.contains("/storage/emulated/0/Documents")) -> R.drawable.ic_folder_24px
+                    (file.path.contains("/storage/emulated/0/Movies")) -> R.drawable.ic_video_library_black_24dp
+                    (file.path.contains("/storage/emulated/0/DCIM")) -> R.drawable.ic_menu_gallery
+                    (file.path.contains("/storage/emulated/0/Alarms")) -> R.drawable.ic_access_alarm_black_24dp
+                    (file.path.contains("/storage/emulated/0/Download")) -> R.drawable.ic_file_download_black_24dp
+                    (file.path.contains("/storage/emulated/0/Ringtones")) -> R.drawable.ic_music_note_24px
+                    (file.path.contains("/storage/emulated/0/Pictures")) -> R.drawable.ic_picture_as_pdf_24px
+                    else -> {
+                        R.drawable.ic_error_black_24dp
+                    }
                 }
             )
+
             tvFileName.text = file.name
 
             setOnClickListener {
@@ -55,7 +65,7 @@ class FileAdapter : RecyclerView.Adapter<FileAdapter.ItemViewHolder>() {
 
     fun goBack() {
         selectedFile = selectedFile?.let {
-            setItens(ArrayList(it.parentFile.listFiles()?.toList()?: mutableListOf()))
+            setItens(ArrayList(it.parentFile.listFiles()?.toList() ?: mutableListOf()))
             it.parentFile
         }
     }
