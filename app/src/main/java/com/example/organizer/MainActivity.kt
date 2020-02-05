@@ -1,7 +1,9 @@
 package com.example.organizer
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -36,6 +38,21 @@ class MainActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener{
             fileAdapter.goBack()
         }
+
+       floatingActionButton.setOnClickListener{
+           val internalReference="/sdcard/DCIM/Pictures/logo.png"
+           val uri = Uri.parse(internalReference)
+           val intent = Intent()
+           intent.action = Intent.ACTION_SEND
+           intent.type="image/png"
+           intent.flags=Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+           intent.putExtra(Intent.EXTRA_STREAM, uri)
+
+           if(intent.resolveActivity(packageManager)!=null){
+               val intentChooser= Intent.createChooser(intent, "Compartilhar imagem com:")
+               startActivity(intentChooser)
+           }
+       }
     }
 
     private fun list() {
