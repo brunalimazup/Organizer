@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
+import kotlinx.android.synthetic.main.activity_toolbar.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,28 +31,27 @@ class MainActivity : AppCompatActivity() {
         onBackPressed()
     }
 
-   private fun allComponents() {
-        var toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setTitle("SD CARD")
-        toolbar.setNavigationOnClickListener{
+    private fun allComponents() {
+        setSupportActionBar(toolbar_main as Toolbar?)
+        supportActionBar?.title = "SD CARD"
+        (toolbar_main as Toolbar?)?.setNavigationOnClickListener {
             fileAdapter.goBack()
         }
 
-       floatingActionButton.setOnClickListener{
-           val internalReference="/sdcard/DCIM/Pictures/logo.png"
-           val uri = Uri.parse(internalReference)
-           val intent = Intent()
-           intent.action = Intent.ACTION_SEND
-           intent.type="image/png"
-           intent.flags=Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-           intent.putExtra(Intent.EXTRA_STREAM, uri)
+        floatingActionButton.setOnClickListener {
+            val internalReference = "/sdcard/DCIM/Pictures/logo.png"
+            val uri = Uri.parse(internalReference)
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+            intent.type = "image/png"
+            intent.flags = Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
 
-           if(intent.resolveActivity(packageManager)!=null){
-               val intentChooser= Intent.createChooser(intent, "Compartilhar imagem com:")
-               startActivity(intentChooser)
-           }
-       }
+            if (intent.resolveActivity(packageManager) != null) {
+                val intentChooser = Intent.createChooser(intent, "Compartilhar imagem com:")
+                startActivity(intentChooser)
+            }
+        }
     }
 
     private fun list() {
@@ -105,10 +104,10 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onBackPressed() {
         fileAdapter.goBack()
     }
-
 
 
 }
